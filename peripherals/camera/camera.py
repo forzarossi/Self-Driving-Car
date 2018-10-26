@@ -2,6 +2,8 @@
 # file: camera.py                                          #
 # author: Marc Rossi                                       #
 # email: marcrossi@umass.edu                               #
+#                
+#          MUST BE RUN WITH SUDO AT THE MOMENT     
 ############################################################
 
 from io import BytesIO
