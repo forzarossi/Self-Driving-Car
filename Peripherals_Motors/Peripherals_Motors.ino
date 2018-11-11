@@ -9,6 +9,9 @@
  6. To get current readigs from motor2 use "ObjectName.getM2CurrentMilliamps() " 
  "stopIfFault()" function is used to see if there is something is wrong with the motor (and stop it), doesn't matter if you use it or not
  
+ M1-Right Motor
+ M2-Left Motor
+ 
  */
 
 DualMC33926MotorShield md;
