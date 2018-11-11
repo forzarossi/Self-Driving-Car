@@ -5,11 +5,11 @@
  */
 
 #include <Encoder.h>
-#include <PinChangeInt.h>
-
+// when going forward, the left wheel counter increments 
+//   and the right wheel counter decrements
 # define r1 2
-# define r2 3
-# define l1 9
+# define r2 9
+# define l1 3
 # define l2 10
 // Change these two numbers to the pins connected to your encoder.
 //   Best Performance: both pins have interrupt capability
@@ -21,10 +21,8 @@ Encoder rightEnc(r1,r2);
 
 
 void setup() {
-//  pinMode(p1,INPUT);
-//  pinMode(p2,INPUT);
   Serial.begin(9600);
-  Serial.println("Basic Encoder Test:");
+  Serial.println("Encoder Test:");
 }
 
 long oldLeftPos  = -999;
