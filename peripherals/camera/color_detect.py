@@ -5,11 +5,12 @@
 #                                                          #
 #          MUST BE RUN WITH SUDO AT THE MOMENT             #
 ############################################################
-from io import BytesIO
-from time import sleep
-from picamera import PiCamera
+# from io import BytesIO
+# from time import sleep
+# from picamera import PiCamera
 from PIL import Image
 import numpy as np
+import serial
 
 ##############################
 # Takes image using PiCamera #
@@ -23,16 +24,23 @@ def take_image():
     camera.capture(stream, format='jpeg')
     stream.seek(0)
     image = Image.open(stream)
+    image = image.rotate(180)
+    process_image(image)
+
+def process_image(image):
     image_array = np.asarray(image)
-    process_image(image_array)
+    #find_black_indicies(image_array)
+    #find_yellow_indicies(image_array)
 
-def process_image(image_array):
-    find_black_indicies(image_array)
-    find_yellow_indicies(image_array)
+    cropped_image = image.crop(((0, 400, 640,480)))
+    cropped_array = np.asarray(cropped_image)
+    if(len(find_red_indicies(cropped_array)[0]) > 40000):
+        ser = serial.Serial('/dev/ttyACM0')
+        ser.write(b'stop')
 
-    # if(len(find_red_indicies(image_array))>100):
-    #     stopsign
-    to_filtered_image(image_array, "red")
+    #to_filtered_image(cropped_array, "red")
+    # to_filtered_image(image_array, "black")
+    # to_filtered_image(image_array, "yellow")
 
 ########################################################################
 #    Check where the pixel is equal to 0,0,0 with a threshold of 50    #
@@ -41,7 +49,7 @@ def find_black_indicies(image_array):
     return np.where(np.all(np.logical_and(image_array >(0,0,0), image_array < (50,50,50))==True, axis=-1))
 
 def find_red_indicies(image_array):
-    return np.where(np.all(np.logical_and(image_array >(0,0,0), image_array < (50,50,50))==True, axis=-1))
+    return np.where(np.all(np.logical_and(image_array > (150, 50, 50), image_array < (255, 150, 150)) == True, axis=-1))
 
 def find_yellow_indicies(image_array):
     return np.where(np.all(np.logical_and(image_array >(215,215,50), image_array < (250,250,100))==True, axis=-1))
@@ -59,19 +67,19 @@ def to_filtered_image(image_array, color):
         Image.fromarray(rgba).save(color + ".png")
 
     if color is "yellow":
-        alpha = ~np.all(np.logical_and(image_array > (215,215,50), image_array < (250,250,100)) == True, axis=-1) * 255
-        rgba = np.dstack((np.all(np.logical_and(image_array > (220,220, 50), image_array < (250,250, 180)) == True, axis=-1), alpha)).astype(
+        alpha = ~np.all(np.logical_and(image_array > (215,215,50), image_array < (250,250,100)) == False, axis=-1) * 255
+        rgba = np.dstack((np.all(np.logical_and(image_array > (220,220, 50), image_array < (250,250, 180)) == False, axis=-1), alpha)).astype(
             np.uint8)
 
         Image.fromarray(rgba).save(color + ".png")
 
     if color is "red":
-        alpha = ~np.all(np.logical_and(image_array > (100, 0, 0), image_array < (200, 70, 70)) == False, axis=-1) * 255
-        rgba = np.dstack((np.all(np.logical_and(image_array > (100, 0, 0), image_array < (200, 70, 70)) == False, axis=-1),
+        alpha = ~np.all(np.logical_and(image_array > (150, 50, 50), image_array < (255, 150, 150)) == True, axis=-1) * 255
+        rgba = np.dstack((np.all(np.logical_and(image_array > (150, 50, 50), image_array < (255, 150, 150)) == True, axis=-1),
                           alpha)).astype(
             np.uint8)
 
-        Image.fromarray(rgba).save(color + ".png")
+        Image.fromarray(rgba).save(color + "isolated.png")
 
 take_image()
 
