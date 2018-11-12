@@ -29,7 +29,7 @@ long oldLeftPos  = -999;
 long oldRightPos  = -999;
 
 void loop() {
-  long newLeftPos = leftEnc.read();
+  long newLeftPos = -leftEnc.read();
   long newRightPos = rightEnc.read();
   if (newLeftPos != oldLeftPos || newRightPos != oldRightPos){
     oldLeftPos = newLeftPos;
