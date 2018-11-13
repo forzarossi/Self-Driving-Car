@@ -108,7 +108,7 @@ void loop() {
       /*
       Serial.println(StartingTimeArray[1]);
       Serial.println(EndingTimeArray[1]);
-      Serial.println();
+      Serial.println();;
       */
     }
   }
