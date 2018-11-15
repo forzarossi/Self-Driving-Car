@@ -26,10 +26,10 @@ long oldRightPos  = -999;
 int i=100;
 int time=0;
 int h=0;
-int bound=200;
-int LowerLimit=80;
+int bound=400;
+int LowerLimit=150;
 
-const int ArraySize=(200-80/10) + 1;
+const int ArraySize=(400-150/10) + 1;
 int StartingTimeArray[ArraySize];
 int EndingTimeArray[ArraySize];
 
@@ -90,14 +90,14 @@ void loop() {
     while(1){
       md.setM2Speed(0);
       md.setM1Speed(0);
-      bound =200;
+      bound =400;
       for (i=0;bound>LowerLimit-10;i++){
         Serial.print(bound);
         Serial.print("\t");
         bound=bound-10;
       }
       Serial.println();
-      bound =200;
+      bound =400;
       for (i=0;bound>LowerLimit-10;i++){
         Serial.print(EndingTimeArray[i]-StartingTimeArray[i]);
         Serial.print("\t");
