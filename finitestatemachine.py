@@ -96,24 +96,36 @@ def dijsktra(graph, start, end):
 	return path
 
 # returns connection type between states within path
-def get_connections_for_path(path):
-	connections = []
-	for index in range(len(path)):
-		if index < len(path) - 1:
-			for edge in edges:
-				if edge[0] == path[index] and edge[1] == path[index + 1]:
-					connections.append(edge[3])
+def get_path_for_states(graph, states):
+	if len(states) < 2:
+		return None
+	path = []
+	for state_index in range(len(states)):
+		if state_index == len(states) - 1:
+			path.append(states[state_index])
+		else:
+			intermediate_path = dijsktra(graph, states[state_index], states[state_index + 1])
+			del(intermediate_path[len(intermediate_path) - 1])
+			for intermediate_state in intermediate_path:
+				path.append(intermediate_state)
+	return path
 
-	return connections
-
+# returns direction at "current" state intersection to get to "next" state intersection
+# or returns None if not possible
+def get_direction_between_states(current, next):
+	for edge in edges:
+		if edge[0] == current and edge[1] == next:
+			return edge[3]
+	return None
  
 if __name__== "__main__":
 	graph = Graph()
 	for edge in edges:
 		graph.add_edge(*edge)
-	start = int(sys.argv[1])
-	end = int(sys.argv[2])
-	path = dijsktra(graph, start, end)
-	connections = get_connections_for_path(path)
-	print(path)
-	print(connections)
+	states = []
+	# get list of states
+	del(sys.argv[0])
+	for arg in sys.argv:
+		states.append(int(arg))
+	# print path between all states
+	print(get_path_for_states(graph, states))
