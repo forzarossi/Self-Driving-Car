@@ -129,3 +129,4 @@ if __name__== "__main__":
 		states.append(int(arg))
 	# print path between all states
 	print(get_path_for_states(graph, states))
+    
