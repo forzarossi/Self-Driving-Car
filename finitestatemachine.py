@@ -1,4 +1,6 @@
 from collections import defaultdict
+import numpy as np
+import sys
 
 # graph to represent board
 class Graph():
@@ -64,6 +66,8 @@ edges = [
 	(12, 9, 8, 9)
 ]
 
+actions =
+
 # returns shortest path between start and end state
 def dijsktra(graph, start, end):
 	# shortest paths is a dict of states
@@ -113,15 +117,14 @@ def get_connections_for_path(path):
 
 	return connections
 
-# example of how it works
-def main():
+ 
+if __name__== "__main__":
 	graph = Graph()
 	for edge in edges:
 		graph.add_edge(*edge)
-	path = dijsktra(graph, 1, 2)
+	start = int(sys.argv[1])
+	end = int(sys.argv[2])
+	path = dijsktra(graph, start, end)
 	connections = get_connections_for_path(path)
 	print(path)
 	print(connections)	
- 
-if __name__== "__main__":
-  main()
