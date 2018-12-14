@@ -13,7 +13,7 @@ class Graph():
 		e.g. {('X', 'A'): 7, ('X', 'B'): 2, ...}
 		self.connections has all the connection types between two states,
 		with the two states as a tuple as the key
-		e.g. {('X', 'A'): 7, ('X', 'B'): 2, ...}
+		e.g. {('X', 'A'): 'S', ('X', 'B'): 'L', ...}
 		"""
 		self.edges = defaultdict(list)
 		self.weights = {}
@@ -24,49 +24,38 @@ class Graph():
 		self.weights[(from_state, to_state)] = weight
 		self.connections[(from_state, to_state)] = connection
 
-# edges entry: (from state #, to state #, weight, connection)
+# edges entry: (from state #, to state #, weight, direction in intersection)
 #	Weight: # of tiles in between state X and Y
-# 	Connection types:
-# 		1 - straight
-# 		2 - straight curved connection right
-# 		3 - straight curved connection left
-# 		4 - intersection straight
-# 		5 - intersection right
-# 		6 - intersection left
-# 		7 - straight speed track inside
-# 		8 - straight speed track outside
-# 		9 - intersection speed track inside
-# 		10 - intersection speed track outside
-# 		11 - intersection curved connection right
-# 		12 - intersection curved connection left
+# 	Intersection direction types:
+#		L: left
+#		R: right
+#		S: straight
 edges = [
-	(1, 4, 2, 6),
-	(1, 12, 2, 4),
-	(2, 4, 2, 5),
-	(2, 8, 2, 4),
-	(3, 8, 2, 5),
-	(3, 12, 2, 6),
-	(4, 7, 4, 12),
-	(4, 11, 4, 11),
-	(5, 3, 2, 6),
-	(5, 7, 4, 3),
-	(6, 3, 2, 5),
-	(6, 11, 4, 2),
-	(7, 1, 2, 6),
-	(7, 10, 8, 8),
-	(8, 6, 4, 11),
-	(8, 10, 8, 10),
-	(9, 1, 2, 5),
-	(9, 5, 4, 2),
-	(10, 2, 2, 6),
-	(10, 5, 4, 3),
-	(11, 2, 2, 5),
-	(11, 9, 10, 7),
-	(12, 5, 4, 12),
-	(12, 9, 8, 9)
+	(1, 4, 2, 'L'),
+	(1, 12, 2, 'S'),
+	(2, 4, 2, 'R'),
+	(2, 8, 2, 'S'),
+	(3, 8, 2, 'R'),
+	(3, 12, 2, 'L'),
+	(4, 7, 4, 'L'),
+	(4, 11, 4, 'R'),
+	(5, 3, 2, 'L'),
+	(5, 7, 4, 'S'),
+	(6, 3, 2, 'R'),
+	(6, 11, 4, 'S'),
+	(7, 1, 2, 'L'),
+	(7, 10, 8, 'S'),
+	(8, 6, 4, 'R'),
+	(8, 10, 8, 'L'),
+	(9, 1, 2, 'R'),
+	(9, 5, 4, 'S'),
+	(10, 2, 2, 'L'),
+	(10, 5, 4, 'S'),
+	(11, 2, 2, 'R'),
+	(11, 9, 10, 'S'),
+	(12, 5, 4, 'L'),
+	(12, 9, 8, 'R')
 ]
-
-actions =
 
 # returns shortest path between start and end state
 def dijsktra(graph, start, end):
@@ -127,4 +116,4 @@ if __name__== "__main__":
 	path = dijsktra(graph, start, end)
 	connections = get_connections_for_path(path)
 	print(path)
-	print(connections)	
+	print(connections)
